@@ -26,29 +26,34 @@ bool empty_list(list *l) {
     }
 }
 
-list *search_list(list *l, item_type x) {
-    if (l == NULL) {
+list *search_list(list *l, item_type x) { /* l, a pointer to the head of the linked list */
+    // the list is empty
+    if (l == NULL) { 
         return(NULL);
     }
 
+    // the item x is the first in the linked list
     if (l->item == x) {
         return(l);
+    // to look at a smaller linked list
     } else {
         return(search_list(l->next, x));
     }
 }
 
-void insert_list(list **l, item_type x) {
+
+void insert_list(list **l, item_type x) {    /* need **l (pointer of pointer of the head element l) since the head element changes */
     list *p;    /* temporary pointer */
 
     p = malloc(sizeof(list));
     p->item = x;
-    p->next = *l;
-    *l = p;
+    p->next = *l;    /* now p points to the (old) head element */
+    *l = p; /* pointer to the head now becomes p (new head element) */
+    // this linked-list is in descending order (the last added node is the head)
 }
 
 list *item_ahead(list *l, list *x) {
-    if ((l == NULL) || (l->next == NULL)) {
+    if ((l == NULL) || (l->next == NULL)) {    /* the list is empty or the end of the linked list */
         return(NULL);
     }
 
@@ -68,14 +73,14 @@ void print_list(list *l) {
 }
 
 void delete_list(list **l, list **x) {
-    list *p;            /* item pointer */
-    list *pred;         /* predecessor pointer */
+    list *p;            /* a pointer to the item that is being deleted */
+    list *pred;         /* a pointer to the predecessor */
 
     p = *l;
     pred = item_ahead(*l, *x);
 
     if (pred == NULL) { /* splice out of list */
-        *l = p->next;
+        *l = p->next;    /* head element is now p->next */
     } else {
         pred->next = (*x)->next;
     }
